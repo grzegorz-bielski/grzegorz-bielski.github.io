@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <title>😿</title>
+  </head>
+  <body class="body">
+    <div class="back" aria-hidden="true"></div>
+    <div class="front">
+      <h1>What are you looking for <br />anyway? 👀</h1>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Roboto Mono", monospace;
+  }
+  canvas {
+    display: block;
+  }
+
+  .back {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .front {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -75%);
+
+    z-index: 1;
+    margin: 3rem auto;
+    width: 100%;
+    color: white;
+    text-shadow: 4px 4px 0px rgb(197, 194, 192);
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  @media screen and (min-width: 992px) {
+    h1 {
+      font-size: 3.1rem;
+    }
+  }
+</style>
+<script type="module">
+  import * as T from "https://unpkg.com/three?module";
+
+  const app = bootstrap();
+
+  const geometry = new T.BoxGeometry(1.75, 1.75, 1.75);
+  const material = new T.MeshBasicMaterial({ color: 0xf59b42 });
+  const cube = new T.Mesh(geometry, material);
+
+  app.scene.add(cube);
+  app.camera.position.z = 5;
+
+  loop();
+
+  function loop() {
+    requestAnimationFrame(loop);
+
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.05;
+
+    app.renderer.render(app.scene, app.camera);
+  }
+
+  function bootstrap() {
+    const aspectRatio = () => window.innerWidth / window.innerHeight;
+
+    const scene = new T.Scene();
+    const camera = new T.PerspectiveCamera(75, aspectRatio(), 0.1, 1000);
+    const renderer = new T.WebGLRenderer();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    scene.background = new T.Color(0xf5e5d5);
+
+    document.querySelector(".back").appendChild(renderer.domElement);
+    window.addEventListener("resize", () => {
+      camera.aspect = aspectRatio();
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    return {
+      scene,
+      camera,
+      renderer,
+    };
+  }
+</script>
